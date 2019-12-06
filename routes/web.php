@@ -11,19 +11,49 @@
 |
 */
 
+Route::get('/cars.about');
 
-Route::get('/', 'PagesController@home');
+// Route::get('/about', 'PagesController@about');
 
-Route::get('/about', 'PagesController@about');
+// Route::get('/mobil', 'MobilController@index');
 
-Route::get('/mobil', 'MobilController@index');
+// //Project Baru
+// Route::get('/cars', 'CarsController@index');
 
+// Route::get('/cars/create', 'CarsController@create');
 
-// Project Baru
-Route::get('/cars', 'CarsController@index');
+// Route::get('/cars/{car}', 'CarsController@show');
 
-Route::get('/cars/create', 'CarsController@create');
+// Route::post('/cars', 'CarsController@store');
 
-Route::get('/cars/{car}', 'CarsController@show');
+// Route::delete('/cars/{car}', 'CarsController@destroy');
 
-Route::post('/cars', 'CarsController@store');
+// Route::get('/cars/{car}/edit', 'CarsController@edit');
+
+// Route::patch('/cars/{car}', 'CarsController@update');
+// Auth::routes();
+
+// Route::get('/cars', 'CarsController@index')->name('index');
+
+Route::group(['middleware' => 'web'], function(){
+    Route::auth();
+});
+
+Route::group(['middleware' => ['web', 'auth']], function()
+{
+    Route::get('/cars', 'CarsController@index');
+    Route::get('/', function()
+    {
+        if (Auth::user()->admin == 1)
+        {
+            return view ('index');
+        }else{
+            return view('cars.meneger');
+        }
+    });
+});
+
+Route::get('admin', ['middlewere' => ['web', 'auth', 'admin'], function()
+{
+    return view('admin/meneger');
+}]);

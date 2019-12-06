@@ -16,6 +16,7 @@ class CarsController extends Controller
     {
         $cars = Car::all();
         return view ('cars.index', compact('cars'));
+        return view ('cars.meneger', compact('cars'));
     }
 
     /**
@@ -87,7 +88,7 @@ class CarsController extends Controller
      */
     public function edit(Car $car)
     {
-        //
+        return view('cars.edit', compact('car'));
     }
 
     /**
@@ -99,7 +100,24 @@ class CarsController extends Controller
      */
     public function update(Request $request, Car $car)
     {
-        //
+        $request->validate([
+            'merk' => 'required',
+            'plat' => 'required',
+            'harga' => 'required',
+            'nama' => 'required',
+            'nohp' => 'required',
+        ]);
+
+        Car::where('id', $car->id)
+            ->update([
+                'merk' => $request->merk,
+                'plat' => $request->plat,
+                'harga' => $request->harga,
+                'nama' => $request->nama,
+                'nohp' => $request->nohp
+            ]);
+        return redirect('/cars')->with('status','Data berhasil Diedit');
+        return $request;
     }
 
     /**
@@ -110,6 +128,7 @@ class CarsController extends Controller
      */
     public function destroy(Car $car)
     {
-        //
+        Car::destroy($car->id);
+        return redirect('/cars')->with('status','Data berhasil Dihapus');
     }
 }
