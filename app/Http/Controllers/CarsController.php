@@ -16,7 +16,6 @@ class CarsController extends Controller
     {
         $cars = Car::all();
         return view ('cars.index', compact('cars'));
-        return view ('cars.meneger', compact('cars'));
     }
 
     /**
